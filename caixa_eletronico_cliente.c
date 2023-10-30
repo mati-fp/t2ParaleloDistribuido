@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <rpc/rpc.h>
-#include "fatoracao.h"
+#include "operacoes.h"
+#include "banco.h"
 
 int main(int argc, char *argv[])
 {
@@ -28,5 +29,9 @@ int main(int argc, char *argv[])
 	printf("Fatoração: %ld\n", fatorado);
 
 	return 0;
+}
+
+int saque(int &id, float &valor){
+	
 }
 

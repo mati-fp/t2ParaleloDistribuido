@@ -1,17 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <rpc/rpc.h>
-#include "fatoracao.h"
+#include "operacoes.h"
+#include "banco.h"
 
-typedef struct {
-	char nome[50];
-	float saldo;
-} ContaCriacao;
-
-typedef struct {
-	int id;
-	float valor;
-} OperacaoConta;
 
 int main(int argc, char *argv[])
 {

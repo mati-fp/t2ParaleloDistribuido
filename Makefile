@@ -3,8 +3,9 @@ CFLAGS = -I/usr/include/tirpc/ -ltirpc
 
 all:
 	rpcgen banco.x
-	$(CC) -o cliente cliente.c $(CFLAGS)
-	$(CC) -o servidor fatoracao_svc.c servidor.c $(CFLAGS)
+	$(CC) -o caixa caixa_eletronico_cliente.c $(CFLAGS)
+	$(CC) -o agencia agencia_cliente.c $(CFLAGS)
+	$(CC) -o servidor banco.c administracao_servidor.c $(CFLAGS)
 		
 clean:
-	rm -f fatoracao_svc.c fatoracao_clnt.c fatoracao.h servidor cliente *~
+	rm -f banco_clnt.c banco_svc.c banco_xdr.c banco.h servidor caixa agencia *~
