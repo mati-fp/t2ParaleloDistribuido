@@ -62,11 +62,11 @@ int main(int argc, char *argv[])
 
 	strcpy(servidor, argv[1]); 
 
+	char choice;
     do {
 		int id;
 		float valor;
         printf("Selecione uma operação: S - Saque, D - Deposito, V - Verificar Saldo, Q - Quit\n");
-		char choice;
         scanf(" %c", &choice);
 		choice = toupper(choice);
 
