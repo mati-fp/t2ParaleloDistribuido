@@ -6,16 +6,19 @@
 struct CRIA_CONTA {
     char nome[50];
     float saldo;
+    int operacao;
 };
 
 struct SAQUE {
     int id;
-    float valor; 
+    float valor;
+    int operacao; 
 };
 
 struct DEPOSITO {
     int id;
     float valor;
+    int operacao;
 };
 
 program BANCO_PROG {                /* Programa */

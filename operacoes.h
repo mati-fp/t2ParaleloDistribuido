@@ -3,8 +3,12 @@ typedef struct {
 	char nome[50];
 	float saldo;
 	int ativa;
-    int operacao;
 } Conta;
+
+typedef struct {
+    int id;
+    int realizada;
+} OPERACAO;
 
 struct CRIA_CONTA {
     char nome[50];
@@ -23,8 +27,3 @@ struct DEPOSITO {
     float valor;
     int operacao;
 };
-
-typedef struct {
-    int id;
-    int realizada;
-} OPERACAO;

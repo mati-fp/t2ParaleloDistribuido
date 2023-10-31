@@ -8,7 +8,7 @@
 #define MAX_OPERACOES 100
 
 const static int erro = -1;
-const static int erroOperacaoJaRealizada = -2;
+const static int erroOperacaoJaRealizada = 2;
 const static int retorno = 1;
 
 int isInit = 0;
