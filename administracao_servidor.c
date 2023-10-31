@@ -12,7 +12,7 @@ const static int erroOperacaoJaRealizada = 2;
 const static int retorno = 1;
 
 int isInit = 0;
-int idContas = 1;
+int qtdContas = 1;
 int contOperacoes = 0;
 
 Conta contas[MAX_CONTAS];
@@ -69,17 +69,17 @@ int *cria_conta_1_svc(CRIA_CONTA *contaParam) {
 
     int index = cria_operacao(contaParam->operacao);
 
-    if (contaParam->saldo < 0 || idContas >= MAX_CONTAS) {
+    if (contaParam->saldo < 0 || qtdContas >= MAX_CONTAS) {
         return &erro;
     }
 
-    Conta *conta = &contas[idContas];
-    conta->id = idContas;
+    Conta *conta = &contas[qtdContas];
+    conta->id = qtdContas;
     strcpy(conta->nome, contaParam->nome);
     conta->saldo = contaParam->saldo;
     conta->ativa = 1;
 
-    idContas++;
+    qtdContas++;
 
     confirma_operacao(index);
 
@@ -98,7 +98,7 @@ int *fechamento_conta_1_svc(int *id) {
 
     int index = cria_operacao(contaParam->operacao);
    
-    if (*id < 0 || *id >= idContas) {
+    if (*id < 0 || *id >= qtdContas) {
         return &erro;
     }
 
@@ -125,7 +125,7 @@ double *consulta_saldo_1_svc(int *id) {
     int index = cria_operacao(contaParam->operacao);
 
     static double erro = -1.0;
-    if (*id < 0 || *id >= idContas || !contas[*id].ativa) {
+    if (*id < 0 || *id >= qtdContas || !contas[*id].ativa) {
         return &erro;
     }
 
@@ -147,7 +147,7 @@ int *saque_1_svc(SAQUE *saque) {
     int index = cria_operacao(contaParam->operacao);
 
     pthread_mutex_lock(&locks[saque->id]);
-    if (saque->id < 0 || saque->id >= idContas || !contas[saque->id].ativa || contas[saque->id].saldo < saque->valor) {
+    if (saque->id < 0 || saque->id >= qtdContas || !contas[saque->id].ativa || contas[saque->id].saldo < saque->valor) {
         return &erro;
     }
 
@@ -172,7 +172,7 @@ int *deposito_1_svc(DEPOSITO *deposito) {
     int index = cria_operacao(contaParam->operacao);
 
     pthread_mutex_lock(&locks[deposito->id]);
-    if (deposito->valor < 0 || deposito->id < 0 || deposito->id >= idContas || !contas[deposito->id].ativa) {
+    if (deposito->valor < 0 || deposito->id < 0 || deposito->id >= qtdContas || !contas[deposito->id].ativa) {
         return &erro;
     }
 
