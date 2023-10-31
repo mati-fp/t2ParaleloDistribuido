@@ -7,14 +7,12 @@
 #include "operacoes.h"
 #include "banco.h"
 
-char choice;
+char servidor[50];
 int operacao;
-char nome[50];
-int id;
-float valor;
+
 int stat;
 int retorno;
-char servidor[50];
+
 
 int saque(int *id, float *valor){
 	SAQUE saque;
@@ -65,7 +63,10 @@ int main(int argc, char *argv[])
 	strcpy(servidor, argv[1]); 
 
     do {
+		int id;
+		float valor;
         printf("Selecione uma operação: S - Saque, D - Deposito, V - Verificar Saldo, Q - Quit\n");
+		char choice;
         scanf(" %c", &choice);
 		choice = toupper(choice);
 
