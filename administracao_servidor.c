@@ -6,14 +6,15 @@
 
 #define MAX_CONTAS 100
 #define MAX_OPERACOES 100
-static int isInit = 0;
 
-static int erro = -1;
-static int erroOperacaoJaRealizada = -2;
-static int retorno = 1;
+const static int erro = -1;
+const static int erroOperacaoJaRealizada = -2;
+const static int retorno = 1;
 
-static int idContas = 0;
-static int contOperacoes = 0;
+int isInit = 0;
+int idContas = 0;
+int contOperacoes = 0;
+
 Conta contas[MAX_CONTAS];
 OPERACAO operacoes[MAX_OPERACOES];
 pthread_mutex_t locks[MAX_CONTAS];
