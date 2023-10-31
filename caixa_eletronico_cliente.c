@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-int saque(int &id, float &valor){
+int saque(int *id, float *valor){
 	
 }
 
