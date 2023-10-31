@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <rpc/rpc.h>
-#include "./operacoes.h"
-#include "./banco.h"
+#include "operacoes.h"
+#include "banco.h"
 
 char choice;
 int operacao;
@@ -14,15 +14,16 @@ int id;
 float valor;
 int stat;
 int retorno;
+char servidor[50];
 
 int saque(int *id, float *valor){
-	Saque saque;
+	SAQUE saque;
 	saque.id = *id;
 	saque.valor = *valor;
 	saque.operacao = rand();
 
 	for (int i = 0; i < 3 ; i++) {
-		stat = callrpc(argv[1], BANCO_PROG, BANCO_VERSION, SAQUE,
+		stat = callrpc(servidor, BANCO_PROG, BANCO_VERSION, SAQUE,
 			       (xdrproc_t)xdr_SAQUE, (char *)&saque, 
 			       (xdrproc_t)xdr_int, (char *)&retorno );
 		if (stat!= 0) {
@@ -60,6 +61,8 @@ int main(int argc, char *argv[])
         fprintf(stderr,"Uso:\n%s <nome_do_servidor>\n\n",argv[0]);
         return 1;
     }
+
+	strcpy(servidor, argv[1]); 
 
     do {
         printf("Selecione uma operação: S - Saque, D - Deposito, V - Verificar Saldo, Q - Quit\n");
