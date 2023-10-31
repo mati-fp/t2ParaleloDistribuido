@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <rpc/rpc.h>
-#include "operacoes.h"
-#include "banco.h"
+#include "./operacoes.h"
+#include "./banco.h"
 
 char choice;
 int operacao;
@@ -44,11 +44,11 @@ int saque(int *id, float *valor){
 }
 
 int deposito(int *id, float *valor){
-	
+	return 0;
 }
 
 int verifica_saldo(int *id){
-	
+	return 0;
 }
 
 
@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
                 break;
         }
 
-    } while(operation != 'Q');
+    } while(choice != 'Q');
 
     return 0;
 }

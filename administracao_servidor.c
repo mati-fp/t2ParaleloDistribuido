@@ -12,10 +12,14 @@ const static int erroOperacaoJaRealizada = 2;
 const static int retorno = 1;
 
 int isInit = 0;
-int idContas = 0;
+int idContas = 1;
 int contOperacoes = 0;
 
 Conta contas[MAX_CONTAS];
+contas[0].id = 0;
+contas[0].nome = "Conta 0";
+contas[0].saldo = 1000;
+contas[0].ativa = 1;
 OPERACAO operacoes[MAX_OPERACOES];
 pthread_mutex_t locks[MAX_CONTAS];
 
@@ -74,6 +78,8 @@ int *cria_conta_1_svc(CRIA_CONTA *contaParam) {
     strcpy(conta->nome, contaParam->nome);
     conta->saldo = contaParam->saldo;
     conta->ativa = 1;
+
+    idContas++;
 
     confirma_operacao(index);
 
