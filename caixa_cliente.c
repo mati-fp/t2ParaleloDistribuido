@@ -27,14 +27,15 @@ int saque(int *id, float *valor){
 			clnt_perrno(stat);
 			printf("\n");
 			return -1;
-		}
-		if (retorno == 1 || retorno == 2) {
-			printf("Operação realizada com sucesso. Código retorno: %d\n", retorno);
-			return 0;
+		} else {
+			break;
 		}
 	}
 
-	if (retorno < 0) {
+	if (retorno == 1 || retorno == 2) {
+		printf("Operação realizada com sucesso. Código retorno: %d\n", retorno);
+		return 0;
+	} else {
 		printf("Erro ao realizar operação.Código retorno: %d\n", retorno);
 		return -1;
 	}
@@ -51,24 +52,26 @@ int deposito(int *id, float *valor){
 		stat = callrpc(servidor, BANCO_PROG, BANCO_VERSION, DEPOSITAR,
 			       (xdrproc_t)xdr_DEPOSITO, (char *)&deposito, 
 			       (xdrproc_t)xdr_int, (char *)&retorno );
+
 		if (stat!= 0) {
 			clnt_perrno(stat);
 			printf("\n");
-			return -1;
-		}
-		if (retorno == 1 || retorno == 2) {
-			printf("Operação realizada com sucesso. Código retorno: %d\n", retorno);
-			return 0;
-		}
+			continue;
+		} else {
+			break;
+		}		   
 	}
 
-	if (retorno < 0) {
+	if (retorno == 1 || retorno == 2) {
+		printf("Operação realizada com sucesso. Código retorno: %d\n", retorno);
+		return 0;
+	} else {
 		printf("Erro ao realizar operação.Código retorno: %d\n", retorno);
 		return -1;
 	}
 }
 
-int verifica_saldo(int *id){
+int verifica_saldo(int id){
 
 	float saldo;
 
@@ -82,8 +85,7 @@ int verifica_saldo(int *id){
 			return -1;
 		}
 		if (saldo >= 0) {
-			printf("Operação realizada com sucesso. Saldo: %f\n", saldo);
-			printf("Saldo: %f\n", saldo);
+			printf("Operação realizada com sucesso. Saldo: %f\n\n", saldo);
 			return 0;
 		}
 		if (saldo == -1) {
@@ -137,7 +139,7 @@ int main(int argc, char *argv[])
                 printf("Digite o ID da conta: ");
                 scanf("%d", &id);
 				getchar();
-				verifica_saldo(&id);
+				verifica_saldo(id);
                 break;
             case 'Q':
                 printf("Saindo...\n");

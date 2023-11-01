@@ -42,6 +42,11 @@ int verifica_operacao(int id) {
 
 int cria_operacao(int id) {
 
+    int index_verify = verifica_operacao(id);
+    if (index_verify != -1){
+        return index_verify;
+    }
+
     operacoes[contOperacoes].id = id;
     operacoes[contOperacoes].realizada = 0;
     int index = contOperacoes;
