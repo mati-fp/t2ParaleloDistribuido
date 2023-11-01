@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
 				scanf("%s", nome);
 				printf("Digite o valor do deposito inicial: ");
 				scanf("%f", &valor);
-				abertura_conta(nome, &saldo);
+				abertura_conta(nome, &valor);
 				break;
 			case 'F':
 				printf("Digite o ID da conta: ");

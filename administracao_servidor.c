@@ -7,9 +7,9 @@
 #define MAX_CONTAS 100
 #define MAX_OPERACOES 100
 
-const static int erro = -1;
-const static int erroOperacaoJaRealizada = 2;
-const static int retorno = 1;
+static int erro = -1;
+static int erroOperacaoJaRealizada = 2;
+static int retorno = 1;
 
 int isInit = 0;
 int qtdContas = 1;
@@ -18,11 +18,6 @@ int contOperacoes = 0;
 Conta contas[MAX_CONTAS];
 pthread_mutex_t locks[MAX_CONTAS];
 OPERACAO operacoes[MAX_OPERACOES];
-
-contas[0].id = 0;
-contas[0].nome = "Conta 0";
-contas[0].saldo = 1000;
-contas[0].ativa = 1;
 
 
 void criaMutex(){
@@ -59,7 +54,7 @@ void confirma_operacao(int index) {
     operacoes[index].realizada = 1;
 }
 
-int *cria_conta_1_svc(CRIA_CONTA *contaParam) {
+int *cria_conta_1_svc(ABERTURA_CONTA *contaParam, struct svc_req *) {
     criaMutex();
 
     int index_verifica = verifica_operacao(contaParam->operacao);
@@ -88,17 +83,8 @@ int *cria_conta_1_svc(CRIA_CONTA *contaParam) {
     return &retorno;
 }
 
-int *fechamento_conta_1_svc(int *id) {
+int *fechamento_conta_1_svc(int *id, struct svc_req *) {
     criaMutex();
-
-    int index_verifica = verifica_operacao(contaParam->operacao);
-    if (index_verifica != -1) {
-        if (operacoes[index_verifica].realizada) {
-            return &erroOperacaoJaRealizada;
-        }
-    } 
-
-    int index = cria_operacao(contaParam->operacao);
    
     if (*id < 0 || *id >= qtdContas) {
         return &erro;
@@ -109,34 +95,21 @@ int *fechamento_conta_1_svc(int *id) {
         return &retorno;
     }
 
-    confirma_operacao(index);
-
     return &erro;
 }
 
-double *consulta_saldo_1_svc(int *id) {
+float *consulta_saldo_1_svc(int *id, struct svc_req *) {
     criaMutex();
 
-    int index_verifica = verifica_operacao(contaParam->operacao);
-    if (index_verifica != -1) {
-        if (operacoes[index_verifica].realizada) {
-            return &erroOperacaoJaRealizada;
-        }
-    } 
-
-    int index = cria_operacao(contaParam->operacao);
-
-    static double erro = -1.0;
+    static float erroFloat = -1.0;
     if (*id < 0 || *id >= qtdContas || !contas[*id].ativa) {
-        return &erro;
+        return &erroFloat;
     }
-
-    confirma_operacao(index);
 
     return &contas[*id].saldo;
 }
 
-int *saque_1_svc(SAQUE *saque) {
+int *sacar_1_svc(SAQUE *contaParam, struct svc_req *) {
     criaMutex();
 
     int index_verifica = verifica_operacao(contaParam->operacao);
@@ -148,20 +121,20 @@ int *saque_1_svc(SAQUE *saque) {
 
     int index = cria_operacao(contaParam->operacao);
 
-    pthread_mutex_lock(&locks[saque->id]);
-    if (saque->id < 0 || saque->id >= qtdContas || !contas[saque->id].ativa || contas[saque->id].saldo < saque->valor) {
+    pthread_mutex_lock(&locks[contaParam->id]);
+    if (contaParam->id < 0 || contaParam->id >= qtdContas || !contas[contaParam->id].ativa || contas[contaParam->id].saldo < contaParam->valor) {
         return &erro;
     }
 
-    contas[saque->id].saldo -= saque->valor;
-    pthread_mutex_unlock(&locks[saque->id]);
+    contas[contaParam->id].saldo -= contaParam->valor;
+    pthread_mutex_unlock(&locks[contaParam->id]);
 
     confirma_operacao(index);
 
     return &retorno;
 }
 
-int *deposito_1_svc(DEPOSITO *deposito) {
+int *depositar_1_svc(DEPOSITO *contaParam, struct svc_req *) {
     criaMutex();
 
     int index_verifica = verifica_operacao(contaParam->operacao);
@@ -173,13 +146,13 @@ int *deposito_1_svc(DEPOSITO *deposito) {
 
     int index = cria_operacao(contaParam->operacao);
 
-    pthread_mutex_lock(&locks[deposito->id]);
-    if (deposito->valor < 0 || deposito->id < 0 || deposito->id >= qtdContas || !contas[deposito->id].ativa) {
+    pthread_mutex_lock(&locks[contaParam->id]);
+    if (contaParam->valor < 0 || contaParam->id < 0 || contaParam->id >= qtdContas || !contas[contaParam->id].ativa) {
         return &erro;
     }
 
-    contas[deposito->id].saldo += deposito->valor;
-    pthread_mutex_unlock(&locks[deposito->id]);
+    contas[contaParam->id].saldo += contaParam->valor;
+    pthread_mutex_unlock(&locks[contaParam->id]);
 
     confirma_operacao(index);
 
