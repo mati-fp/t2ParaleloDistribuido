@@ -16,12 +16,14 @@ int qtdContas = 1;
 int contOperacoes = 0;
 
 Conta contas[MAX_CONTAS];
+pthread_mutex_t locks[MAX_CONTAS];
+OPERACAO operacoes[MAX_OPERACOES];
+
 contas[0].id = 0;
 contas[0].nome = "Conta 0";
 contas[0].saldo = 1000;
 contas[0].ativa = 1;
-OPERACAO operacoes[MAX_OPERACOES];
-pthread_mutex_t locks[MAX_CONTAS];
+
 
 void criaMutex(){
     if (!isInit){

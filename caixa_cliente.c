@@ -8,7 +8,6 @@
 #include "banco.h"
 
 char servidor[50];
-int operacao;
 
 int stat;
 int retorno;
@@ -21,7 +20,7 @@ int saque(int *id, float *valor){
 	saque.operacao = rand();
 
 	for (int i = 0; i < 3 ; i++) {
-		stat = callrpc(servidor, BANCO_PROG, BANCO_VERSION, SAQUE,
+		stat = callrpc(servidor, BANCO_PROG, BANCO_VERSION, SACAR,
 			       (xdrproc_t)xdr_SAQUE, (char *)&saque, 
 			       (xdrproc_t)xdr_int, (char *)&retorno );
 		if (stat!= 0) {
@@ -30,24 +29,69 @@ int saque(int *id, float *valor){
 			return -1;
 		}
 		if (retorno == 1 || retorno == 2) {
-			printf("Operação realizada com sucesso.\n");
+			printf("Operação realizada com sucesso. Código retorno: %d\n", retorno);
 			return 0;
 		}
 	}
 
 	if (retorno < 0) {
-		printf("Erro ao realizar operação.\n");
+		printf("Erro ao realizar operação.Código retorno: %d\n", retorno);
 		return -1;
 	}
 
 }
 
 int deposito(int *id, float *valor){
-	return 0;
+	DEPOSITO deposito;
+	deposito.id = *id;
+	deposito.valor = *valor;
+	deposito.operacao = rand();
+
+	for (int i = 0; i < 3 ; i++) {
+		stat = callrpc(servidor, BANCO_PROG, BANCO_VERSION, DEPOSITAR,
+			       (xdrproc_t)xdr_DEPOSITO, (char *)&deposito, 
+			       (xdrproc_t)xdr_int, (char *)&retorno );
+		if (stat!= 0) {
+			clnt_perrno(stat);
+			printf("\n");
+			return -1;
+		}
+		if (retorno == 1 || retorno == 2) {
+			printf("Operação realizada com sucesso. Código retorno: %d\n", retorno);
+			return 0;
+		}
+	}
+
+	if (retorno < 0) {
+		printf("Erro ao realizar operação.Código retorno: %d\n", retorno);
+		return -1;
+	}
 }
 
 int verifica_saldo(int *id){
-	return 0;
+
+	float saldo;
+
+	for (int i = 0; i < 3 ; i++) {
+		stat = callrpc(servidor, BANCO_PROG, BANCO_VERSION, CONSULTA_SALDO,
+			       (xdrproc_t)xdr_int, (char *)&id, 
+			       (xdrproc_t)xdr_float, (char *)&saldo );
+		if (stat!= 0) {
+			clnt_perrno(stat);
+			printf("\n");
+			return -1;
+		}
+		if (retorno == 1 || retorno == 2) {
+			printf("Operação realizada com sucesso. Código retorno: %d\n", retorno);
+			printf("Saldo: %f\n", saldo);
+			return 0;
+		}
+	}
+
+	if (retorno < 0) {
+		printf("Erro ao realizar operação.Código retorno: %d\n", retorno);
+		return -1;
+	}
 }
 
 
@@ -63,9 +107,9 @@ int main(int argc, char *argv[])
 	strcpy(servidor, argv[1]); 
 
 	char choice;
+	int id;
+	float valor;
     do {
-		int id;
-		float valor;
         printf("Selecione uma operação: S - Saque, D - Deposito, V - Verificar Saldo, Q - Quit\n");
         scanf(" %c", &choice);
 		choice = toupper(choice);
