@@ -26,7 +26,7 @@ int saque(int *id, float *valor){
 		if (stat!= 0) {
 			clnt_perrno(stat);
 			printf("\n");
-			return -1;
+			continue;
 		} else {
 			break;
 		}
@@ -35,8 +35,17 @@ int saque(int *id, float *valor){
 	if (retorno == 1 || retorno == 2) {
 		printf("Operação realizada com sucesso. Código retorno: %d\n", retorno);
 		return 0;
+	} else if (retorno == -1) {
+		printf("Erro ao realizar operação, saldo insuficiente. Código retorno: %d\n", retorno);
+		return -1;
+	} else if (retorno == -2) {
+		printf("Erro ao realizar operação, número de conta inexistente. Código retorno: %d\n", retorno);
+		return -1;
+	} else if (retorno == -3) {
+		printf("Erro ao realizar operação, conta desativada. Código retorno: %d\n", retorno);
+		return -1;
 	} else {
-		printf("Erro ao realizar operação.Código retorno: %d\n", retorno);
+		printf("Erro ao realizar operação, problemas na conexão.\n");
 		return -1;
 	}
 
@@ -55,7 +64,7 @@ int deposito(int *id, float *valor){
 
 		if (stat!= 0) {
 			clnt_perrno(stat);
-			printf("\n");
+			printf("\n\n");
 			continue;
 		} else {
 			break;
@@ -63,10 +72,19 @@ int deposito(int *id, float *valor){
 	}
 
 	if (retorno == 1 || retorno == 2) {
-		printf("Operação realizada com sucesso. Código retorno: %d\n", retorno);
+		printf("Operação realizada com sucesso. Código retorno: %d\n\n", retorno);
 		return 0;
+	} else if (retorno == -1) {
+		printf("Erro ao realizar operação, naõ existe depósito negativo.Código retorno: %d\n\n", retorno);
+		return -1;
+	} else if (retorno == -2) {
+		printf("Erro ao realizar operação, número de conta inexistente. Código retorno: %d\n\n", retorno);
+		return -1;
+	} else if (retorno == -3) {
+		printf("Erro ao realizar operação, conta desativada. Código retorno: %d\n\n", retorno);
+		return -1;
 	} else {
-		printf("Erro ao realizar operação.Código retorno: %d\n", retorno);
+		printf("Erro ao realizar operação, problemas na conexão.\n\n");
 		return -1;
 	}
 }
@@ -82,16 +100,24 @@ int verifica_saldo(int id){
 		if (stat!= 0) {
 			clnt_perrno(stat);
 			printf("\n");
-			return -1;
+			continue;
+		} else {
+			break;
 		}
-		if (saldo >= 0) {
-			printf("Operação realizada com sucesso. Saldo: %f\n\n", saldo);
-			return 0;
-		}
-		if (saldo == -1) {
-			printf("Conta inexistente ou saldo negativo.\n");
-			return -1;
-		}
+	}
+
+	if (saldo >= 0) {
+		printf("Operação realizada com sucesso. Saldo: %f\n\n", saldo);
+		return 0;
+	} else if (saldo == -1) {
+		printf("Conta inexistente.\n\n");
+		return -1;
+	} else if (saldo == -2){
+		printf("Conta desativada.\n\n");
+		return -1;
+	} else {
+		printf("Erro ao realizar operação, problema na conexão\n\n");
+		return -1;
 	}
 }
 
