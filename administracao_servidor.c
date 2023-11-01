@@ -12,7 +12,7 @@ static int erroOperacaoJaRealizada = 2;
 static int retorno = 1;
 
 int isInit = 0;
-int qtdContas = 1;
+int qtdContas = 0;
 int contOperacoes = 0;
 
 Conta contas[MAX_CONTAS];
@@ -79,6 +79,8 @@ int *cria_conta_1_svc(ABERTURA_CONTA *contaParam, struct svc_req *) {
     qtdContas++;
 
     confirma_operacao(index);
+
+    printf("Conta criada com sucesso. ID: %d, Saldo: %f\n", conta->id, conta->saldo);
 
     return &retorno;
 }

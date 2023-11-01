@@ -81,16 +81,15 @@ int verifica_saldo(int *id){
 			printf("\n");
 			return -1;
 		}
-		if (retorno == 1 || retorno == 2) {
-			printf("Operação realizada com sucesso. Código retorno: %d\n", retorno);
+		if (saldo >= 0) {
+			printf("Operação realizada com sucesso. Saldo: %f\n", saldo);
 			printf("Saldo: %f\n", saldo);
 			return 0;
 		}
-	}
-
-	if (retorno < 0) {
-		printf("Erro ao realizar operação.Código retorno: %d\n", retorno);
-		return -1;
+		if (saldo == -1) {
+			printf("Conta inexistente ou saldo negativo.\n");
+			return -1;
+		}
 	}
 }
 
@@ -164,38 +163,47 @@ int main(int argc, char *argv[])
 		printf("A - Abrir Conta, F - Fechar Conta, Q - Quit\n");
         scanf(" %c", &choice);
 		choice = toupper(choice);
+		getchar(); // consome o '\n' deixado por scanf
 
         switch(choice) {
             case 'S':
 				printf("Digite o ID da conta: ");
 				scanf("%d", &id);
+				getchar();
 				printf("Digite o valor: ");
 				scanf("%f", &valor);
+				getchar();
 				saque(&id, &valor);
 				break;
             case 'D':
                 printf("Digite o ID da conta: ");
                 scanf("%d", &id);
+				getchar();
                 printf("Digite o valor: ");
                 scanf("%f", &valor);
+				getchar();
 				deposito(&id, &valor);
                 break;
             case 'V':
                 printf("Digite o ID da conta: ");
                 scanf("%d", &id);
+				getchar();
 				verifica_saldo(&id);
                 break;
 			case 'A':
 				printf("Digite o seu nome: ");
-				char nome[50];
-				scanf("%s", nome);
+				char nome[51];
+				fgets(nome, sizeof(nome), stdin);
+				nome[strcspn(nome, "\n")] = 0; // Remove o newline do final
 				printf("Digite o valor do deposito inicial: ");
 				scanf("%f", &valor);
+				getchar();
 				abertura_conta(nome, &valor);
 				break;
 			case 'F':
 				printf("Digite o ID da conta: ");
 				scanf("%d", &id);
+				getchar();
 				fechamento_conta(&id);
 				break;
             case 'Q':
